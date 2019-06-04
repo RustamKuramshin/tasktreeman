@@ -1,0 +1,14 @@
+POST /run-new
+Host: localhost:8080
+
+###
+
+POST /task-take
+Host: localhost:8080
+
+###
+
+POST /task-result
+Host: localhost:8080
+
+###
