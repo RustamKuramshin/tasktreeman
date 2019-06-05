@@ -1,4 +1,4 @@
-POST /run-new
+POST /run-new?initStr=abc
 Host: localhost:8080
 
 ###
@@ -8,7 +8,7 @@ Host: localhost:8080
 
 ###
 
-POST /task-result
+POST /task-result?result=qwerty&taskId=123
 Host: localhost:8080
 
 ###
