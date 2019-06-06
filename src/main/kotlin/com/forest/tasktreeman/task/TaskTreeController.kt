@@ -14,33 +14,25 @@ class TaskTreeController {
     @PostMapping("/run-new")
     fun runTask(
             @RequestParam(required = true) initVal: String
-    ) {
-        /*initVal - начальное значение для Task1.
+    ): Response {
 
-        * При вызове данного метода менеджер должен начать
-        * процесс выполнения иерархии задач, начиная с Task1 и далее запускать задачи
-        * в соответствии с представленной иерархией. Метод может быть вызван
-        * неограниченное количество раз параллельно за короткий промежуток
-        * времени, и все запущенные на выполнение иерархии с различными
-        * начальными значениями должны выполняться параллельно и независимо друг от друга*/
-
-         if (forestMap[initVal] == null) {
+        if (forestMap[initVal] == null) {
              val taskTree = TaskTree(initVal)
              forestMap[initVal] = taskTree
-             taskQueue.enqueue(taskTree.root)
-         }
+             taskQueue.enqueue(taskTree.createTask())
+        }
+
+        return Response(success = true)
     }
 
     @PostMapping("/task-take")
-    fun giveTask(): Task? {
+    fun giveTask(): TaskDTO? {
 
-        /*Метод предназначен для "взятия" задания
-        * на выполнение условным воркером. Менеджер должен вернуть в ответе на
-        * этот запрос одно задание с установленным начальным значением, которое
-        * нужно выполнить.*/
-
-        return taskQueue.dequeue()
-
+        val task = taskQueue.dequeue()
+        task?.let {
+            return TaskDTO(id = it.id, treeId = it.treeId, initVal = it.initVal!!)
+        }
+        return null
     }
 
     @PostMapping("/task-result")
@@ -48,22 +40,16 @@ class TaskTreeController {
             @RequestParam(required = true) Id: Int,
             @RequestParam(required = true) treeId: String,
             @RequestParam(required = true) result: String
-    ) {
-        /*id - идентификатор конкретного экземпляра,
-        * result - строка <результат>, которая далее будет входным
-        * значением для следующего по иерархии задания.
-        *
-        * Метод предназначен для уведомления о завершении
-        * конкретного экземпляра задания.*/
+    ): Response {
 
         val taskTree = forestMap[treeId]
-        taskTree?.find(Id)?.let {
-            it.leftChild  = Task(id = idGen.getNext(), treeId = treeId, initVal = result)
-            it.rightChild = Task(id = idGen.getNext(), treeId = treeId, initVal = result)
-            taskQueue.enqueue(it.leftChild)
-            taskQueue.enqueue(it.rightChild)
+        taskTree?.findTask(Id)?.let {
+              it.result = "${it.initVal}$result"
+              taskQueue.enqueue(taskTree.createTask())
 
         }
+
+        return Response(success = true)
 
     }
 
