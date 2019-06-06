@@ -24,8 +24,6 @@ class TaskTreeController {
         * времени, и все запущенные на выполнение иерархии с различными
         * начальными значениями должны выполняться параллельно и независимо друг от друга*/
 
-        //TODO: Начать выполнение иерархии задача. Асинхнронная реализация
-
          if (forestMap[initVal] == null) {
              val taskTree = TaskTree(initVal)
              forestMap[initVal] = taskTree
@@ -41,7 +39,6 @@ class TaskTreeController {
         * этот запрос одно задание с установленным начальным значением, которое
         * нужно выполнить.*/
 
-        //TODO: Передать очередную задачу воркеру
         return taskQueue.dequeue()
 
     }
@@ -58,8 +55,6 @@ class TaskTreeController {
         *
         * Метод предназначен для уведомления о завершении
         * конкретного экземпляра задания.*/
-
-        //TODO: Принять результат от воркера и записать его в TaskTree
 
         val taskTree = forestMap[treeId]
         taskTree?.find(Id)?.let {
