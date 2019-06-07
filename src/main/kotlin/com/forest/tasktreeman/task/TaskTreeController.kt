@@ -44,13 +44,18 @@ class TaskTreeController {
 
         val taskTree = forestMap[treeId]
         taskTree?.findTask(Id)?.let {
-              it.result = "${it.initVal}$result"
-              taskQueue.enqueue(taskTree.createTask())
 
+            it.result = "${it.initVal}$result"
+
+            while (true) {
+                val newTask = taskTree.createTask()
+                if (newTask == null) {
+                    break
+                } else taskQueue.enqueue(newTask)
+            }
         }
 
         return Response(success = true)
-
     }
 
 }

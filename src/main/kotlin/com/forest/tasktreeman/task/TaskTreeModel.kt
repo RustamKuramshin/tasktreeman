@@ -29,7 +29,7 @@ class TaskTree (val treeId: String){
         return current
     }
 
-    fun createTask(): Task {
+    fun createTask(): Task? {
         val newId = idGen.getNext()
         val newNode = Task(id = newId, treeId = treeId)
         if (root == null){
@@ -45,22 +45,31 @@ class TaskTree (val treeId: String){
                 if (newId < current!!.id) {
                     current = current.leftChild
                     if (current == null) {
-                        parent.leftChild = newNode
-                        newNode.initVal = parent.result
-                        return newNode
+                        return when (parent.result) {
+                            null -> null
+                            else -> {
+                                parent.leftChild = newNode
+                                newNode.initVal = parent.result
+                                newNode
+                            }
+                        }
                     }
                 } else {
                     current = current.rightChild
                     if (current == null) {
-                        parent.rightChild = newNode
-                        newNode.initVal = parent.result
-                        return newNode
+                        return when (parent.result){
+                            null -> null
+                            else -> {
+                                parent.rightChild = newNode
+                                newNode.initVal = parent.result
+                                newNode
+                            }
+                        }
                     }
                 }
             }
         }
     }
-
 }
 
 class TaskQueue {
@@ -80,13 +89,9 @@ class TaskQueue {
             return items.removeAt(0)
         }
     }
-
 }
 
 object idGen {
-
     private val random = Random()
-
     fun getNext(): Int = random.nextInt(1000000000)
-
 }
