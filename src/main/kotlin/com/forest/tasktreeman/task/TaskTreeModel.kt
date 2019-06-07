@@ -11,7 +11,7 @@ data class Task(
         var rightChild: Task? = null
 )
 
-class TaskTree (val treeId: String){
+class TaskTree(val treeId: String) {
 
     var root: Task? = null
 
@@ -32,12 +32,11 @@ class TaskTree (val treeId: String){
     fun createTask(): Task? {
         val newId = idGen.getNext()
         val newNode = Task(id = newId, treeId = treeId)
-        if (root == null){
+        if (root == null) {
             newNode.initVal = treeId
             root = newNode
             return newNode
-        }
-        else {
+        } else {
             var current = root
             var parent: Task
             while (true) {
@@ -57,7 +56,7 @@ class TaskTree (val treeId: String){
                 } else {
                     current = current.rightChild
                     if (current == null) {
-                        return when (parent.result){
+                        return when (parent.result) {
                             null -> null
                             else -> {
                                 parent.rightChild = newNode
@@ -76,14 +75,14 @@ class TaskQueue {
 
     var items: MutableList<Task?> = mutableListOf()
 
-    fun isEmpty():Boolean = items.isEmpty()
+    fun isEmpty(): Boolean = items.isEmpty()
 
-    fun enqueue(element:Task?){
+    fun enqueue(element: Task?) {
         items.add(element)
     }
 
-    fun dequeue():Task?{
-        if (this.isEmpty()){
+    fun dequeue(): Task? {
+        if (this.isEmpty()) {
             return null
         } else {
             return items.removeAt(0)

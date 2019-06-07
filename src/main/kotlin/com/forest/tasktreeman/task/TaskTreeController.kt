@@ -17,9 +17,9 @@ class TaskTreeController {
     ): Response {
 
         if (forestMap[initVal] == null) {
-             val taskTree = TaskTree(initVal)
-             forestMap[initVal] = taskTree
-             taskQueue.enqueue(taskTree.createTask())
+            val taskTree = TaskTree(initVal)
+            forestMap[initVal] = taskTree
+            taskQueue.enqueue(taskTree.createTask())
         }
 
         return Response(success = true)
