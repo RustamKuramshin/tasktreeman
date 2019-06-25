@@ -1,8 +1,6 @@
 package com.forest.tasktreeman.task
 
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class TaskTreeController {
@@ -11,8 +9,8 @@ class TaskTreeController {
 
     private var taskQueue: TaskQueue = TaskQueue()
 
-    @PostMapping("/run-new")
-    fun runTask(
+    @PostMapping("/tasks")
+    fun createTask(
             @RequestParam(required = true) initVal: String
     ): Response {
 
@@ -25,8 +23,8 @@ class TaskTreeController {
         return Response(success = true)
     }
 
-    @PostMapping("/task-take")
-    fun giveTask(): TaskDTO? {
+    @GetMapping("/tasks")
+    fun getTask(): TaskDTO? {
 
         val task = taskQueue.dequeue()
         task?.let {
@@ -35,9 +33,9 @@ class TaskTreeController {
         return null
     }
 
-    @PostMapping("/task-result")
-    fun processResult(
-            @RequestParam(required = true) Id: Int,
+    @PutMapping("/tasks/{Id}")
+    fun setResult(
+            @PathVariable(required = true) Id: Int,
             @RequestParam(required = true) treeId: String,
             @RequestParam(required = true) result: String
     ): Response {
@@ -57,5 +55,4 @@ class TaskTreeController {
 
         return Response(success = true)
     }
-
 }
